@@ -148,6 +148,7 @@
     <div class="card">
       <label>Item Name</label>
       <input id="item" type="text" placeholder="Example: MAC Tools 21mm wrench" oninput="calculate()" />
+      <button type="button" onclick="openComps()" style="margin-top:0;margin-bottom:14px;background:#16a34a;">View eBay Sold Comps</button>
 
       <div class="grid">
         <div>
@@ -253,6 +254,17 @@
       document.getElementById("roi").innerText = roi.toFixed(1) + "%";
       document.getElementById("totalCost").innerText = money(totalCost);
       document.getElementById("fees").innerText = money(fees);
+    }
+
+    function openComps() {
+      const item = document.getElementById("item").value.trim();
+      if (!item) {
+        alert("Enter an item name first.");
+        return;
+      }
+      const query = encodeURIComponent(item);
+      const url = `https://www.ebay.com/sch/i.html?_nkw=${query}&LH_Sold=1&LH_Complete=1`;
+      window.open(url, "_blank");
     }
 
     function resetCalc() {
