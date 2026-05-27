@@ -181,8 +181,8 @@
           <input id="buy" type="number" value="0" oninput="calculate()" />
         </div>
         <div>
-          <label>Desired Profit</label>
-          <input id="desiredProfit" type="number" value="20" oninput="calculate()" />
+          <label>Desired Profit %</label>
+          <input id="desiredProfit" type="number" value="40" oninput="calculate()" />
         </div>
         <div>
           <label>Expected Sale</label>
@@ -302,7 +302,8 @@
       const feesPercent = Number(document.getElementById("feesPercent").value || 0);
       const gas = Number(document.getElementById("gas").value || 0);
       const misc = Number(document.getElementById("misc").value || 0);
-      const desiredProfit = Number(document.getElementById("desiredProfit").value || 0);
+      const desiredProfitPercent = Number(document.getElementById("desiredProfit").value || 0);
+      const desiredProfitDollars = buy * (desiredProfitPercent / 100);
 
       const fees = sale * (feesPercent / 100);
       const totalCost = buy + shipping + gas + misc + fees;
@@ -313,7 +314,7 @@
       const goodBuyMax = netAfterCosts > 0 ? netAfterCosts / 1.2 : 0;
       const feeRate = feesPercent / 100;
       const baseCostsBeforeFees = buy + shipping + gas + misc;
-      const minSellNeeded = feeRate < 1 ? (baseCostsBeforeFees + desiredProfit) / (1 - feeRate) : 0;
+      const minSellNeeded = feeRate < 1 ? (baseCostsBeforeFees + desiredProfitDollars) / (1 - feeRate) : 0;
       const targetStatus = sale >= minSellNeeded && sale > 0 ? "Target Met" : "Target Short";
       const roi = buy > 0 ? (profit / buy) * 100 : 0;
       const salesVolume = Number(document.getElementById("salesVolume").value || 0);
@@ -435,7 +436,7 @@
       document.getElementById("feesPercent").value = 13;
       document.getElementById("gas").value = 0;
       document.getElementById("misc").value = 0;
-      document.getElementById("desiredProfit").value = 20;
+      document.getElementById("desiredProfit").value = 40;
       calculate();
     }
 
