@@ -177,7 +177,7 @@
         </div>
 
         <div>
-          <label>Buy Price</label>
+          <label>Actual / Asking Price</label>
           <input id="buy" type="number" value="0" oninput="calculate()" />
         </div>
         <div>
@@ -246,6 +246,10 @@
           <strong id="totalCost">$0.00</strong>
         </div>
         <div class="stat">
+          <small>Suggested Buy Zone</small>
+          <strong id="buyZone" style="font-size:20px;">Enter comp</strong>
+        </div>
+        <div class="stat">
           <small>Est. Fees</small>
           <strong id="fees">$0.00</strong>
         </div>
@@ -290,6 +294,10 @@
       const fees = sale * (feesPercent / 100);
       const totalCost = buy + shipping + gas + misc + fees;
       const profit = sale - totalCost;
+      const nonBuyCosts = shipping + gas + misc + fees;
+      const netAfterCosts = sale - nonBuyCosts;
+      const strongBuyMax = netAfterCosts > 0 ? netAfterCosts / 1.4 : 0;
+      const goodBuyMax = netAfterCosts > 0 ? netAfterCosts / 1.2 : 0;
       const roi = buy > 0 ? (profit / buy) * 100 : 0;
       const salesVolume = Number(document.getElementById("salesVolume").value || 0);
 
@@ -376,6 +384,7 @@
       document.getElementById("roi").innerText = roi.toFixed(1) + "%";
       document.getElementById("totalCost").innerText = money(totalCost);
       document.getElementById("fees").innerText = money(fees);
+      document.getElementById("buyZone").innerText = sale > 0 ? "Ideal ≤ " + money(strongBuyMax) + " | Max " + money(goodBuyMax) : "Enter comp";
       document.getElementById("velocityRating").value = velocity;
       document.getElementById("fastFlipRating").innerText = fastFlipStars;
       document.getElementById("strategy").innerText = strategy;
