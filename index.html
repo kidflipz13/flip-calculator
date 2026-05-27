@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -196,10 +197,24 @@
     <div class="card">
       <div class="result-head">
         <div>
-          <small style="color:#64748b;font-weight:700;">Deal Score</small>
+          <small style="color:#64748b;font-weight:700;">Flip Analysis</small>
           <h2 id="resultTitle" style="margin:3px 0 0;font-size:22px;">Current Flip</h2>
         </div>
-        <div id="badge" class="badge red">No Deal</div>
+      </div>
+
+      <div class="grid" style="margin-bottom:16px;">
+        <div class="stat">
+          <small>💰 Deal Score</small>
+          <strong id="dealScore" style="font-size:22px;">No Deal</strong>
+        </div>
+        <div class="stat">
+          <small>⚡ Speed Score</small>
+          <strong id="speedScore" style="font-size:22px;">Slow</strong>
+        </div>
+      </div>
+
+      <div id="sweetSpotBanner" style="display:none;background:#16a34a;color:white;padding:14px;border-radius:18px;font-weight:800;text-align:center;margin-bottom:16px;">
+        🔥 SWEET SPOT FLIP — High Velocity + Great Deal
       </div>
 
       <div class="grid">
@@ -267,17 +282,21 @@
         velocity = "MID";
       }
 
-      let score = "No Deal";
-      let badgeClass = "badge red";
+      let dealScore = "No Deal";
+      let speedScore = "Slow";
       let fastFlipStars = "⭐";
       let strategy = "Avoid";
 
-      if (profit >= 30 && roi >= 40) {
-        score = "Strong Deal";
-        badgeClass = "badge green";
-      } else if (profit >= 15 && roi >= 25) {
-        score = "Possible Deal";
-        badgeClass = "badge yellow";
+      if (roi >= 40 && profit >= 10) {
+        dealScore = "Great Deal";
+      } else if (roi >= 20 && profit >= 5) {
+        dealScore = "Good Deal";
+      }
+
+      if (velocity === "HIGH") {
+        speedScore = "Fast";
+      } else if (velocity === "MID") {
+        speedScore = "Moderate";
       }
 
       if (velocity === "HIGH" && profit >= 30 && roi >= 40) {
@@ -301,8 +320,11 @@
       }
 
       document.getElementById("resultTitle").innerText = item;
-      document.getElementById("badge").innerText = score;
-      document.getElementById("badge").className = badgeClass;
+      document.getElementById("dealScore").innerText = dealScore;
+      document.getElementById("speedScore").innerText = speedScore;
+
+      const sweetSpot = dealScore === "Great Deal" && speedScore === "Fast";
+      document.getElementById("sweetSpotBanner").style.display = sweetSpot ? "block" : "none";
       document.getElementById("profit").innerText = money(profit);
       document.getElementById("profit").className = profit >= 0 ? "profit-positive" : "profit-negative";
       document.getElementById("roi").innerText = roi.toFixed(1) + "%";
