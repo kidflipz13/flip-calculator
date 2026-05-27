@@ -334,10 +334,16 @@
       let turnaroundProbability = 0;
       const turnaround = document.getElementById("turnaround").value;
 
-      if (roi >= 40 && profit >= 10) {
+      if (velocity === "HIGH" && roi >= 40 && profit >= 10) {
         dealScore = "Great Deal";
-      } else if (roi >= 20 && profit >= 5) {
+      } else if (velocity === "HIGH" && roi >= 20 && profit >= 5) {
         dealScore = "Good Deal";
+      } else if (velocity === "MID" && roi >= 25 && profit >= 10) {
+        dealScore = "Good Deal";
+      } else if (velocity === "MID" && roi >= 15 && profit >= 5) {
+        dealScore = "Decent Flip";
+      } else if (velocity === "LOW" && roi >= 40 && profit >= 15) {
+        dealScore = "Buy Carefully";
       }
 
       if (velocity === "HIGH") {
@@ -346,24 +352,27 @@
         speedScore = "Moderate";
       }
 
-      if (velocity === "HIGH" && profit >= 30 && roi >= 40) {
+      if (velocity === "HIGH" && roi >= 40 && profit >= 10) {
         fastFlipStars = "⭐⭐⭐⭐⭐";
         strategy = "Fast Flip";
-      } else if (velocity === "HIGH" && profit >= 15 && roi >= 25) {
-        fastFlipStars = "⭐⭐⭐⭐";
-        strategy = "Fast Flip";
-      } else if (velocity === "MID" && profit >= 30 && roi >= 40) {
+      } else if (velocity === "HIGH" && roi >= 20 && profit >= 5) {
         fastFlipStars = "⭐⭐⭐⭐";
         strategy = "Good Flip";
-      } else if (velocity === "MID" && profit >= 15 && roi >= 25) {
+      } else if (velocity === "MID" && roi >= 25 && profit >= 10) {
+        fastFlipStars = "⭐⭐⭐⭐";
+        strategy = "Solid Flip";
+      } else if (velocity === "MID" && roi >= 15 && profit >= 5) {
         fastFlipStars = "⭐⭐⭐";
-        strategy = "Slow Flip";
-      } else if (velocity === "LOW" && profit >= 30 && roi >= 40) {
+        strategy = "Decent Flip";
+      } else if (velocity === "LOW" && roi >= 40 && profit >= 15) {
         fastFlipStars = "⭐⭐⭐";
         strategy = "Buy Carefully";
-      } else if (profit >= 10 && roi >= 20) {
+      } else if (roi >= 10 && profit >= 3) {
         fastFlipStars = "⭐⭐";
         strategy = "Thin Margin";
+      } else {
+        fastFlipStars = "⭐";
+        strategy = "Avoid";
       }
 
       if (turnaround === "7-10") {
