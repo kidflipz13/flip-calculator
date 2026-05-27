@@ -152,6 +152,16 @@
 
       <div class="grid">
         <div>
+          <label>30-Day Sales Volume</label>
+          <input id="salesVolume" type="number" value="0" oninput="calculate()" />
+        </div>
+
+        <div>
+          <label>Velocity Rating</label>
+          <input id="velocityRating" type="text" value="LOW" readonly style="background:#e2e8f0;font-weight:800;" />
+        </div>
+
+        <div>
           <label>Buy Price</label>
           <input id="buy" type="number" value="0" oninput="calculate()" />
         </div>
@@ -240,6 +250,15 @@
       const totalCost = buy + shipping + gas + misc + fees;
       const profit = sale - totalCost;
       const roi = buy > 0 ? (profit / buy) * 100 : 0;
+      const salesVolume = Number(document.getElementById("salesVolume").value || 0);
+
+      let velocity = "LOW";
+
+      if (salesVolume >= 40) {
+        velocity = "HIGH";
+      } else if (salesVolume >= 10) {
+        velocity = "MID";
+      }
 
       let score = "No Deal";
       let badgeClass = "badge red";
@@ -260,6 +279,7 @@
       document.getElementById("roi").innerText = roi.toFixed(1) + "%";
       document.getElementById("totalCost").innerText = money(totalCost);
       document.getElementById("fees").innerText = money(fees);
+      document.getElementById("velocityRating").value = velocity;
     }
 
     function setFees(percent) {
