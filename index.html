@@ -166,6 +166,12 @@
         <div>
           <label>Platform Fees %</label>
           <input id="feesPercent" type="number" value="13" oninput="calculate()" />
+          <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:-6px;">
+            <button type="button" onclick="setFees(13)" style="width:auto;padding:8px 10px;font-size:12px;margin-top:0;background:#2563eb;">eBay</button>
+            <button type="button" onclick="setFees(0)" style="width:auto;padding:8px 10px;font-size:12px;margin-top:0;background:#16a34a;">Marketplace</button>
+            <button type="button" onclick="setFees(10)" style="width:auto;padding:8px 10px;font-size:12px;margin-top:0;background:#9333ea;">Mercari</button>
+            <button type="button" onclick="setFees(9.5)" style="width:auto;padding:8px 10px;font-size:12px;margin-top:0;background:#ea580c;">Etsy</button>
+          </div>
         </div>
         <div>
           <label>Gas/Pickup Cost</label>
@@ -254,6 +260,11 @@
       document.getElementById("roi").innerText = roi.toFixed(1) + "%";
       document.getElementById("totalCost").innerText = money(totalCost);
       document.getElementById("fees").innerText = money(fees);
+    }
+
+    function setFees(percent) {
+      document.getElementById("feesPercent").value = percent;
+      calculate();
     }
 
     function openComps() {
