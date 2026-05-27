@@ -181,6 +181,10 @@
           <input id="buy" type="number" value="0" oninput="calculate()" />
         </div>
         <div>
+          <label>Desired Profit</label>
+          <input id="desiredProfit" type="number" value="20" oninput="calculate()" />
+        </div>
+        <div>
           <label>Expected Sale</label>
           <input id="sale" type="number" value="0" oninput="calculate()" />
         </div>
@@ -250,6 +254,14 @@
           <strong id="buyZone" style="font-size:20px;">Enter comp</strong>
         </div>
         <div class="stat">
+          <small>Minimum Sell Needed</small>
+          <strong id="minSellNeeded" style="font-size:20px;">$0.00</strong>
+        </div>
+        <div class="stat">
+          <small>Profit Target</small>
+          <strong id="targetStatus" style="font-size:20px;">Target Short</strong>
+        </div>
+        <div class="stat">
           <small>Est. Fees</small>
           <strong id="fees">$0.00</strong>
         </div>
@@ -290,6 +302,7 @@
       const feesPercent = Number(document.getElementById("feesPercent").value || 0);
       const gas = Number(document.getElementById("gas").value || 0);
       const misc = Number(document.getElementById("misc").value || 0);
+      const desiredProfit = Number(document.getElementById("desiredProfit").value || 0);
 
       const fees = sale * (feesPercent / 100);
       const totalCost = buy + shipping + gas + misc + fees;
@@ -298,6 +311,10 @@
       const netAfterCosts = sale - nonBuyCosts;
       const strongBuyMax = netAfterCosts > 0 ? netAfterCosts / 1.4 : 0;
       const goodBuyMax = netAfterCosts > 0 ? netAfterCosts / 1.2 : 0;
+      const feeRate = feesPercent / 100;
+      const baseCostsBeforeFees = buy + shipping + gas + misc;
+      const minSellNeeded = feeRate < 1 ? (baseCostsBeforeFees + desiredProfit) / (1 - feeRate) : 0;
+      const targetStatus = sale >= minSellNeeded && sale > 0 ? "Target Met" : "Target Short";
       const roi = buy > 0 ? (profit / buy) * 100 : 0;
       const salesVolume = Number(document.getElementById("salesVolume").value || 0);
 
@@ -385,6 +402,8 @@
       document.getElementById("totalCost").innerText = money(totalCost);
       document.getElementById("fees").innerText = money(fees);
       document.getElementById("buyZone").innerText = sale > 0 ? "Ideal ≤ " + money(strongBuyMax) + " | Max " + money(goodBuyMax) : "Enter comp";
+      document.getElementById("minSellNeeded").innerText = money(minSellNeeded);
+      document.getElementById("targetStatus").innerText = targetStatus;
       document.getElementById("velocityRating").value = velocity;
       document.getElementById("fastFlipRating").innerText = fastFlipStars;
       document.getElementById("strategy").innerText = strategy;
@@ -416,6 +435,7 @@
       document.getElementById("feesPercent").value = 13;
       document.getElementById("gas").value = 0;
       document.getElementById("misc").value = 0;
+      document.getElementById("desiredProfit").value = 20;
       calculate();
     }
 
