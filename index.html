@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Flip Deal Calculator</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: #020617;
+      color: white;
+      padding: 18px;
+    }
+    .wrap {
+      max-width: 520px;
+      margin: 0 auto;
+    }
+    .header {
+      text-align: center;
+      padding: 20px 0;
+    }
+    .icon {
+      width: 58px;
+      height: 58px;
+      border-radius: 18px;
+      background: rgba(255,255,255,.12);
+      display: grid;
+      place-items: center;
+      margin: 0 auto 14px;
+      font-size: 28px;
+    }
+    h1 {
+      margin: 0;
+      font-size: 34px;
+      line-height: 1.05;
+    }
+    .sub {
+      color: #cbd5e1;
+      margin-top: 10px;
+      font-size: 15px;
+    }
+    .card {
+      background: white;
+      color: #0f172a;
+      border-radius: 26px;
+      padding: 20px;
+      margin: 16px 0;
+      box-shadow: 0 16px 35px rgba(0,0,0,.25);
+    }
+    label {
+      display: block;
+      font-size: 13px;
+      font-weight: 700;
+      margin-bottom: 6px;
+      color: #334155;
+    }
+    input {
+      width: 100%;
+      padding: 14px;
+      border: 1px solid #cbd5e1;
+      border-radius: 12px;
+      font-size: 16px;
+      margin-bottom: 14px;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    .result-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+    .badge {
+      padding: 9px 12px;
+      border-radius: 999px;
+      font-weight: 800;
+      font-size: 13px;
+      white-space: nowrap;
+    }
+    .green { background: #dcfce7; color: #166534; }
+    .yellow { background: #fef9c3; color: #854d0e; }
+    .red { background: #fee2e2; color: #991b1b; }
+    .stat {
+      background: #f1f5f9;
+      border-radius: 18px;
+      padding: 15px;
+    }
+    .stat small {
+      display: block;
+      color: #64748b;
+      font-weight: 700;
+      margin-bottom: 5px;
+    }
+    .stat strong {
+      font-size: 26px;
+    }
+    .profit-positive { color: #15803d; }
+    .profit-negative { color: #b91c1c; }
+    .note {
+      background: #020617;
+      color: #e2e8f0;
+      border-radius: 18px;
+      padding: 15px;
+      font-size: 13px;
+      line-height: 1.45;
+      margin-top: 14px;
+    }
+    button {
+      width: 100%;
+      border: none;
+      border-radius: 999px;
+      padding: 16px;
+      font-size: 17px;
+      font-weight: 800;
+      background: #2563eb;
+      color: white;
+      margin-top: 14px;
+      cursor: pointer;
+    }
+    .footer {
+      text-align: center;
+      color: #94a3b8;
+      font-size: 12px;
+      padding: 20px 0 8px;
+    }
+    @media (max-width: 430px) {
+      h1 { font-size: 30px; }
+      .grid { gap: 9px; }
+      .card { padding: 17px; }
+      .stat strong { font-size: 22px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="header">
+      <div class="icon">🧮</div>
+      <h1>Flip Deal Calculator</h1>
+      <div class="sub">Quickly check if a thrift, yard sale, estate sale, or Marketplace find is worth flipping.</div>
+    </div>
+
+    <div class="card">
+      <label>Item Name</label>
+      <input id="item" type="text" placeholder="Example: MAC Tools 21mm wrench" oninput="calculate()" />
+
+      <div class="grid">
+        <div>
+          <label>Buy Price</label>
+          <input id="buy" type="number" value="0" oninput="calculate()" />
+        </div>
+        <div>
+          <label>Expected Sale</label>
+          <input id="sale" type="number" value="0" oninput="calculate()" />
+        </div>
+        <div>
+          <label>Shipping/Supplies</label>
+          <input id="shipping" type="number" value="0" oninput="calculate()" />
+        </div>
+        <div>
+          <label>Platform Fees %</label>
+          <input id="feesPercent" type="number" value="13" oninput="calculate()" />
+        </div>
+        <div>
+          <label>Gas/Pickup Cost</label>
+          <input id="gas" type="number" value="0" oninput="calculate()" />
+        </div>
+        <div>
+          <label>Misc Cost</label>
+          <input id="misc" type="number" value="0" oninput="calculate()" />
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="result-head">
+        <div>
+          <small style="color:#64748b;font-weight:700;">Deal Score</small>
+          <h2 id="resultTitle" style="margin:3px 0 0;font-size:22px;">Current Flip</h2>
+        </div>
+        <div id="badge" class="badge red">No Deal</div>
+      </div>
+
+      <div class="grid">
+        <div class="stat">
+          <small>Estimated Profit</small>
+          <strong id="profit" class="profit-negative">$0.00</strong>
+        </div>
+        <div class="stat">
+          <small>ROI</small>
+          <strong id="roi">0.0%</strong>
+        </div>
+        <div class="stat">
+          <small>Total Cost</small>
+          <strong id="totalCost">$0.00</strong>
+        </div>
+        <div class="stat">
+          <small>Est. Fees</small>
+          <strong id="fees">$0.00</strong>
+        </div>
+      </div>
+
+      <div class="note">
+        Rule of thumb: green means investigate further, not automatic buy. Always check sold comps, shipping risk, item condition, demand, and how fast it may sell.
+      </div>
+
+      <button onclick="resetCalc()">Reset Calculator</button>
+    </div>
+
+    <div class="footer">Built for quick resale decisions while sourcing.</div>
+  </div>
+
+  <script>
+    function money(n) {
+      return "$" + Number(n || 0).toFixed(2);
+    }
+
+    function calculate() {
+      const item = document.getElementById("item").value || "Current Flip";
+      const buy = Number(document.getElementById("buy").value || 0);
+      const sale = Number(document.getElementById("sale").value || 0);
+      const shipping = Number(document.getElementById("shipping").value || 0);
+      const feesPercent = Number(document.getElementById("feesPercent").value || 0);
+      const gas = Number(document.getElementById("gas").value || 0);
+      const misc = Number(document.getElementById("misc").value || 0);
+
+      const fees = sale * (feesPercent / 100);
+      const totalCost = buy + shipping + gas + misc + fees;
+      const profit = sale - totalCost;
+      const roi = buy > 0 ? (profit / buy) * 100 : 0;
+
+      let score = "No Deal";
+      let badgeClass = "badge red";
+
+      if (profit >= 30 && roi >= 40) {
+        score = "Strong Deal";
+        badgeClass = "badge green";
+      } else if (profit >= 15 && roi >= 25) {
+        score = "Possible Deal";
+        badgeClass = "badge yellow";
+      }
+
+      document.getElementById("resultTitle").innerText = item;
+      document.getElementById("badge").innerText = score;
+      document.getElementById("badge").className = badgeClass;
+      document.getElementById("profit").innerText = money(profit);
+      document.getElementById("profit").className = profit >= 0 ? "profit-positive" : "profit-negative";
+      document.getElementById("roi").innerText = roi.toFixed(1) + "%";
+      document.getElementById("totalCost").innerText = money(totalCost);
+      document.getElementById("fees").innerText = money(fees);
+    }
+
+    function resetCalc() {
+      document.getElementById("item").value = "";
+      document.getElementById("buy").value = 0;
+      document.getElementById("sale").value = 0;
+      document.getElementById("shipping").value = 0;
+      document.getElementById("feesPercent").value = 13;
+      document.getElementById("gas").value = 0;
+      document.getElementById("misc").value = 0;
+      calculate();
+    }
+
+    calculate();
+  </script>
+</body>
+</html>
