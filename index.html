@@ -172,7 +172,7 @@
         </div>
 
         <div>
-          <label>Turnaround Match</label>
+          <label>Estimated Turnaround Match</label>
           <input id="probabilityRating" type="text" value="0%" readonly style="background:#e2e8f0;font-weight:800;" />
         </div>
 
@@ -258,7 +258,7 @@
           <strong id="strategy" style="font-size:20px;">Avoid</strong>
         </div>
         <div class="stat">
-          <small>Likely Turnaround</small>
+          <small>Turnaround Match</small>
           <strong id="turnaroundProbability" style="font-size:24px;">0%</strong>
         </div>
       </div>
@@ -270,7 +270,7 @@
       <button onclick="resetCalc()">Reset Calculator</button>
     </div>
 
-    <div class="footer">FlipFinder • Built for quick resale decisions while sourcing.</div>
+    <div class="footer">FlipFinder • Built for quick resale decisions while sourcing.<br/><span style="font-size:11px;color:#64748b;">Estimated turnaround match is based on historical sales velocity, pricing behavior, and user inputs. Estimates do not guarantee a sale.</span></div>
   </div>
 
   <script>
@@ -380,7 +380,7 @@
       document.getElementById("fastFlipRating").innerText = fastFlipStars;
       document.getElementById("strategy").innerText = strategy;
       document.getElementById("turnaroundProbability").innerText = turnaroundProbability + "%";
-      document.getElementById("probabilityRating").value = turnaroundProbability + "% likely;
+      document.getElementById("probabilityRating").value = turnaroundProbability + "% estimated match";
     }
 
     function setFees(percent) {
