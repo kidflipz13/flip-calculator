@@ -162,6 +162,21 @@
         </div>
 
         <div>
+          <label>Desired Turnaround</label>
+          <select id="turnaround" onchange="calculate()" style="width:100%;padding:14px;border:1px solid #cbd5e1;border-radius:12px;font-size:16px;margin-bottom:14px;">
+            <option value="7-10">7–10 Days</option>
+            <option value="10-30" selected>10–30 Days</option>
+            <option value="31-60">31–60 Days</option>
+            <option value="90+">90+ Days</option>
+          </select>
+        </div>
+
+        <div>
+          <label>Turnaround Match</label>
+          <input id="probabilityRating" type="text" value="0%" readonly style="background:#e2e8f0;font-weight:800;" />
+        </div>
+
+        <div>
           <label>Buy Price</label>
           <input id="buy" type="number" value="0" oninput="calculate()" />
         </div>
@@ -242,6 +257,10 @@
           <small>Flip Strategy</small>
           <strong id="strategy" style="font-size:20px;">Avoid</strong>
         </div>
+        <div class="stat">
+          <small>Likely Turnaround</small>
+          <strong id="turnaroundProbability" style="font-size:24px;">0%</strong>
+        </div>
       </div>
 
       <div class="note">
@@ -286,6 +305,8 @@
       let speedScore = "Slow";
       let fastFlipStars = "⭐";
       let strategy = "Avoid";
+      let turnaroundProbability = 0;
+      const turnaround = document.getElementById("turnaround").value;
 
       if (roi >= 40 && profit >= 10) {
         dealScore = "Great Deal";
@@ -319,6 +340,31 @@
         strategy = "Thin Margin";
       }
 
+      if (turnaround === "7-10") {
+        if (velocity === "HIGH" && dealScore === "Great Deal") turnaroundProbability = 85;
+        else if (velocity === "HIGH" && dealScore === "Good Deal") turnaroundProbability = 70;
+        else if (velocity === "MID" && dealScore !== "No Deal") turnaroundProbability = 45;
+        else turnaroundProbability = 20;
+      } else if (turnaround === "10-30") {
+        if (velocity === "HIGH" && dealScore !== "No Deal") turnaroundProbability = 90;
+        else if (velocity === "MID" && dealScore === "Great Deal") turnaroundProbability = 75;
+        else if (velocity === "MID" && dealScore === "Good Deal") turnaroundProbability = 60;
+        else if (velocity === "LOW" && dealScore !== "No Deal") turnaroundProbability = 35;
+        else turnaroundProbability = 20;
+      } else if (turnaround === "31-60") {
+        if (velocity === "HIGH" && dealScore !== "No Deal") turnaroundProbability = 95;
+        else if (velocity === "MID" && dealScore !== "No Deal") turnaroundProbability = 80;
+        else if (velocity === "LOW" && dealScore === "Great Deal") turnaroundProbability = 55;
+        else if (velocity === "LOW" && dealScore === "Good Deal") turnaroundProbability = 40;
+        else turnaroundProbability = 25;
+      } else if (turnaround === "90+") {
+        if (dealScore === "Great Deal") turnaroundProbability = 80;
+        else if (dealScore === "Good Deal") turnaroundProbability = 65;
+        else turnaroundProbability = 35;
+      }
+
+      if (dealScore === "No Deal") turnaroundProbability = Math.min(turnaroundProbability, 35);
+
       document.getElementById("resultTitle").innerText = item;
       document.getElementById("dealScore").innerText = dealScore;
       document.getElementById("speedScore").innerText = speedScore;
@@ -333,6 +379,8 @@
       document.getElementById("velocityRating").value = velocity;
       document.getElementById("fastFlipRating").innerText = fastFlipStars;
       document.getElementById("strategy").innerText = strategy;
+      document.getElementById("turnaroundProbability").innerText = turnaroundProbability + "%";
+      document.getElementById("probabilityRating").value = turnaroundProbability + "% likely;
     }
 
     function setFees(percent) {
