@@ -148,7 +148,8 @@
     <div class="card">
       <label>Item Name</label>
       <input id="item" type="text" placeholder="Example: MAC Tools 21mm wrench" oninput="calculate()" />
-      <button type="button" onclick="openComps()" style="margin-top:0;margin-bottom:14px;background:#16a34a;">View eBay Sold Comps</button>
+      <button type="button" onclick="openComps()" style="margin-top:0;margin-bottom:10px;background:#16a34a;">View eBay Sold Comps</button>
+      <button type="button" id="advancedToggle" onclick="toggleAdvanced()" style="margin-top:0;margin-bottom:14px;background:#334155;">Show Advanced Options</button>
 
       <div class="grid">
         <div>
@@ -161,7 +162,7 @@
           <input id="velocityRating" type="text" value="LOW" readonly style="background:#e2e8f0;font-weight:800;" />
         </div>
 
-        <div>
+        <div class="advanced-field" style="display:none;">
           <label>Desired Turnaround</label>
           <select id="turnaround" onchange="calculate()" style="width:100%;padding:14px;border:1px solid #cbd5e1;border-radius:12px;font-size:16px;margin-bottom:14px;">
             <option value="7-10">7–10 Days</option>
@@ -171,7 +172,7 @@
           </select>
         </div>
 
-        <div>
+        <div class="advanced-field" style="display:none;">
           <label>Estimated Turnaround Match</label>
           <input id="probabilityRating" type="text" value="0%" readonly style="background:#e2e8f0;font-weight:800;" />
         </div>
@@ -180,7 +181,7 @@
           <label>Actual / Asking Price</label>
           <input id="buy" type="number" value="0" oninput="calculate()" />
         </div>
-        <div>
+        <div class="advanced-field" style="display:none;">
           <label>Desired Profit %</label>
           <input id="desiredProfit" type="number" value="40" oninput="calculate()" />
         </div>
@@ -188,11 +189,11 @@
           <label>Average Sold Comp</label>
           <input id="sale" type="number" value="0" oninput="calculate()" />
         </div>
-        <div>
+        <div class="advanced-field" style="display:none;">
           <label>Optional: Shipping/Supplies</label>
           <input id="shipping" type="number" value="0" oninput="calculate()" />
         </div>
-        <div>
+        <div class="advanced-field" style="display:none;">
           <label>Platform Fees %</label>
           <input id="feesPercent" type="number" value="13" oninput="calculate()" />
           <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:-6px;">
@@ -202,11 +203,11 @@
             <button type="button" onclick="setFees(9.5)" style="width:auto;padding:8px 10px;font-size:12px;margin-top:0;background:#ea580c;">Etsy</button>
           </div>
         </div>
-        <div>
+        <div class="advanced-field" style="display:none;">
           <label>Optional: Gas/Pickup Cost</label>
           <input id="gas" type="number" value="0" oninput="calculate()" />
         </div>
-        <div>
+        <div class="advanced-field" style="display:none;">
           <label>Optional: Misc Cost</label>
           <input id="misc" type="number" value="0" oninput="calculate()" />
         </div>
@@ -280,7 +281,7 @@
       </div>
 
       <div class="note">
-        FlipFinder helps estimate flip quality using liquidity, ROI, margin, and turnaround goals. Use comps and judgment before buying.
+        Quick Mode keeps sourcing simple. Use the advanced toggle when you want to adjust fees, shipping, gas, desired profit, or turnaround goals.
       </div>
 
       <button onclick="resetCalc()">Reset Calculator</button>
@@ -419,6 +420,14 @@
       document.getElementById("strategy").innerText = strategy;
       document.getElementById("turnaroundProbability").innerText = turnaroundProbability + "%";
       document.getElementById("probabilityRating").value = turnaroundProbability + "% estimated match";
+    }
+
+    function toggleAdvanced() {
+      const fields = document.querySelectorAll(".advanced-field");
+      const button = document.getElementById("advancedToggle");
+      const isHidden = fields.length && fields[0].style.display === "none";
+      fields.forEach(field => field.style.display = isHidden ? "block" : "none");
+      button.innerText = isHidden ? "Hide Advanced Options" : "Show Advanced Options";
     }
 
     function setFees(percent) {
